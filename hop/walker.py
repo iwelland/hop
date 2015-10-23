@@ -17,12 +17,12 @@ def rate_sum_update(hopgraph,oneway=True):
             rate_sum+=g.filtered_graph[node][neighbor]['k']
         g.filtered_graph[node]['rate_sum']=rate_sum
     rate_sum_bulk=0
-    for neighbor in h.graph[1]:
-        rate_sum_bulk+=h.graph[1][neighbor]['k']
-    g.graph[1]['rate_sum']=rate_sum_bulk
+   # for neighbor in h.graph[1]:
+    #    rate_sum_bulk+=h.graph[1][neighbor]['k']
+    #g.graph[1]['rate_sum']=rate_sum_bulk
     return g
 
-def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num=400,filename='walker_rates',edge_count=False,track_entropy_production=False,oneway=True,up_flux=True,writeout_time=100,writeout=False):
+def flux_calculator(hopgraph,trajectory,topology,cutoff=1,delta=0.1,steps=1000,particle_num=400,filename='walker_rates',edge_count=False,track_entropy_production=False,oneway=True,up_flux=True,writeout_time=100,writeout=False):
     h=hopgraph
     if oneway==True:
         h.filter(exclude={"bulk":True,"outliers":True,"unconnected":True,'oneway':True})
@@ -31,7 +31,8 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
         
     h=rate_sum_update(h,oneway)
     trajectories=np.zeros((4,particle_num))
-    u=MDAnalysis.Universe(topology)
+    u=MDAnalysis.Universe(topology,trajectory)
+    totaltime=u.trajectory.totaltime
     p=u.selectAtoms('protein')
     z_center=p.centerOfGeometry()[2]
 
@@ -105,7 +106,7 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
         bulk_rate=0
         for site in h.graph[1]:
             if site in sites:
-                bulk_rate+=h.graph[1][site]['k']
+                bulk_rate+=h.graph[1][site]['N']/totaltime
 
         bulk_time=1/bulk_rate
         return bulk_time
