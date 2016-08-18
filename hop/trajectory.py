@@ -262,19 +262,23 @@ class HoppingTrajectory(object):
                 start = self.traj.start_timestep # starting time step for DCD file
             except AttributeError:
                 start = 1
-        if step is None:
-            try:
-                step = self.traj.skip_timestep   # NSAVC (# ts between written DCD frames)
-            except AttributeError:
-                step = 1
-        if delta is None:
-            from MDAnalysis.core.units import get_conversion_factor
-            delta_ps = self.traj.convert_time_from_native(self.traj.delta)  # length of ts in ps
-            delta = get_conversion_factor('time', 'ps', 'AKMA') * delta_ps
-
+        #if step is None:
+        #    try:
+        #        step = self.traj.dt   # NSAVC (# ts between written DCD frames)
+        #    except AttributeError:
+        #        step = 1
+        #if delta is None:
+           # from MDAnalysis.units import get_conversion_factor
+            #delta_ps = self.traj.convert_time_from_native(self.traj.delta)  # length of ts in ps
+            #delta = get_conversion_factor('time', 'ps', 'AKMA') * delta_ps
+            #delta = int(self.traj.dt)
+        dt = int(self.traj.dt)
+        #dcdwriter = MDAnalysis.coordinates.DCD.DCDWriter(dcdname,self.ts.n_atoms,
+        #                                     start,step,delta,
+        #                                     remarks='Hopping trajectory: x=site y=orbit_site z=0')
         dcdwriter = MDAnalysis.coordinates.DCD.DCDWriter(dcdname,self.ts.n_atoms,
-                                             start,step,delta,
-                                             remarks='Hopping trajectory: x=site y=orbit_site z=0')
+                                             start,1,1,
+                                             remarks='Hopping trajectory: x=site y=orbit_site z=0',dt=1)
         pm = ProgressMeter(self.n_frames, interval=10,
                            format="Mapping frame %(step)5d/%(numsteps)6d  [%(percentage)5.1f%%]\r")
         for ts in self.map_dcd():
