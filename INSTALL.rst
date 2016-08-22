@@ -61,6 +61,8 @@ Required python packages
    numpy           >=1.0.3               http://numpy.scipy.org
    NetworkX        >=1.0                 https://networkx.lanl.gov
    GridDataFormats >= 0.1.1              https://github.com/MDAnalysis/GridDataFormats
+   =============== ===================== ============================================================
+
 
 MDAnalysis_ requires additional modules; see the instructions at
 its home page. Get the latest snapshot from

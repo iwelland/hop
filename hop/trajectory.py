@@ -37,14 +37,11 @@ import numpy
 import MDAnalysis
 import MDAnalysis.coordinates
 from MDAnalysis.core.log import ProgressMeter
-
 from .exceptions import SelectionError
 from .constants import SITELABEL
 from . import utilities
 from .utilities import msg, set_verbosity
 
-
-import logging
 logger = logging.getLogger("MDAnalysis.analysis.hop.trajectory")
 
 def totaltime(trajectory):
