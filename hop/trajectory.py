@@ -42,6 +42,7 @@ from .constants import SITELABEL
 from . import utilities
 from .utilities import msg, set_verbosity
 
+import logging
 logger = logging.getLogger("MDAnalysis.analysis.hop.trajectory")
 
 def totaltime(trajectory):
