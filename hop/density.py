@@ -502,8 +502,8 @@ def density_from_Universe(universe,delta=1.0,atomselection='name OH2',
         h[:],edges[:] = numpy.histogramdd(coord, bins=bins, range=arange, normed=False)
         grid += h  # accumulate average histogram
         pm.echo(ts.frame, len(coord))
-    n_frames = u.trajectory.n_frames / u.trajectory.skip
-    grid /= float(n_frames)
+    #n_frames = u.trajectory.n_frames / u.trajectory.skip
+    grid /= float(u.trajectory.n_frames)
 
     # pick from kwargs
     metadata = kwargs.pop('metadata',{})

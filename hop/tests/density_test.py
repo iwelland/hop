@@ -79,33 +79,14 @@ if __name__ == "__main__":
     startdirectory = os.path.abspath(os.path.curdir)
      
     center_original=[i for i in old_density.centers()]
+
     center_new=[i for i in new_density.centers()]
-    '''
-    if numpy.testing.assert_array_almost_equal(center_original,center_new) is False:
-        print('incorrect centers')
-    del center_original, center_new
-    
-    if numpy.testing.assert_array_almost_equal(new_density.site_occupancy(),old_density.site_occupancy()) is False:
-        print('different occupancies')
-    
-    if numpy.testing.assert_array_almost_equal(new_density.map,old_density.map) is False:
-        print('different maps')
-    
-    if numpy.testing.assert_array_almost_equal(new_density.site_properties,old_density.site_properties) is False:
-        print('different site_properties')
 
-    if numpy.testing.assert_array_almost_equal(new_density.sites,old_density.sites) is False:
-        print('different sites')
-
-    if numpy.testing.assert_array_almost_equal(new_density.site_volume(),old_density.site_volume()) is False:
-        print('different volumes')
-
-    if numpy.testing.assert_array_almost_equal(new_density.origin,old_density.origin) is False:
-        print('different origins')
-    '''
     numpy.testing.assert_array_almost_equal(center_original,center_new,err_msg="Centers are unequal")
+
     del center_original, center_new
-    numpy.testing.assert_array_almost_equal(new_density.site_occupancy(),old_density.site_occupancy(),err_msg="Densities are unequal")
+
+    numpy.testing.assert_array_almost_equal(new_density.site_occupancy(),old_density.site_occupancy(),err_msg="Site occupancies are unequal")
     
     numpy.testing.assert_array_almost_equal(new_density.map,old_density.map,err_msg="Maps are unequal")
     
