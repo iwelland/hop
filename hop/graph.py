@@ -1778,38 +1778,6 @@ class HoppingGraph(object):
             graph = self.graph
         return graph
 
-    def _rate(self,taus,method='survivalfunction',block_w=200):
-        """Compute the rate i--> j, k_ji, from the hopping times tau_ji.
-
-        :Returns: dict(kij=*kji*, N=*N*, fit=*fit*)
-
-                  - *kji* : rate constant in 1/ps
-                  - *N* : number of events
-                  - *fit* : instance of :class:`fit_func`
-
-        :Arguments:
-            *taus*
-                array of all waiting times
-            *method*
-               'survivalfunction'
-                    compute as a fit of a*exp(-k1*t)+(1-a)*exp(-k2*t) or exp(-k*t)
-                    to the survival function S(t); the double exp is tried first
-                    and then decided heuristically if a single exp is a better choice.
-                    Heuristics: Use single exp if
-
-                    * number of data points is <= 10
-                    * double exp asymmetry abs(0.5-a) > 0.49
-                    * k1<0 or k2<0
-
-        :Bugs:
-          - Does not switch to single exponential if double exponential fit fails
-            to converge.
-
-        .. Notes:: Should probably use the integral of the double-exponential fit as an
-          approximation for the rate constant instead of just using the slower
-          one (G. Hummer, pers. comm.)
-        """
-
     def write_psf(self,graph,props,filename=None):
         """Pseudo psf with nodes as atoms and edges as bonds"""
         # Standard no CHEQ format for a Charmm PSF file:

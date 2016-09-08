@@ -86,9 +86,7 @@ if __name__ == "__main__":
 
     del center_original, center_new
 
-    numpy.testing.assert_array_almost_equal(new_density.site_occupancy(),old_density.site_occupancy(),err_msg="Site occupancies are unequal")
     
-    numpy.testing.assert_array_almost_equal(new_density.map,old_density.map,err_msg="Maps are unequal")
     
 #    numpy.testing.assert_array_almost_equal(new_density.site_properties,old_density.site_properties,err_msg="Site Properties unequal")
     '''
@@ -101,8 +99,14 @@ if __name__ == "__main__":
     #if numpy.testing.assert_array_almost_equal(new_density.sites,old_density.sites) is False:
     #    print('different sites')
 
-    if numpy.testing.assert_array_almost_equal(new_density.site_volume(),old_density.site_volume()) is False:
-        print('different volumes')
+
+    numpy.testing.assert_array_almost_equal(new_density.site_volume()[1],numpy.sort(new_density.site_volume()[1])[::-1],err_msg='Sites not sorted') 
+
+    numpy.testing.assert_array_almost_equal(new_density.site_volume(),old_density.site_volume(),err_msg='Site volumes are unequal') 
+
+    numpy.testing.assert_array_almost_equal(new_density.site_occupancy(),old_density.site_occupancy(),err_msg="Site occupancies are unequal")
+
+    numpy.testing.assert_array_almost_equal(new_density.map,old_density.map,err_msg="Maps are unequal")
 
     if numpy.testing.assert_array_almost_equal(new_density.origin,old_density.origin) is False:
         print('different origins')
