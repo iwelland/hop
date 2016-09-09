@@ -1,6 +1,5 @@
 import MDAnalysis
 import numpy as np
-import MDAnalysis.KDTree.NeighborSearch as NS
 import copy
 import time
 
@@ -15,6 +14,13 @@ def setup(topology,trajectory,water_label,protein_label):
     return [u,w]
 
 def track_counts(topology,trajectory,water_label,protein_label,in_top,in_bottom,write_out_time=1000,timestep=0.001,use_cutoff=False,time_cutoff=1000,filename_down='flux_down',filename_up='flux_up'):
+    '''
+    Tracks the number of water molecules crossing the membrane. Specify the topology (e.g. md.pdb), trajectory (e.g. md_fit.xtc),
+    label of the waters, label of the protein, and crossing boundaries for the protein-water interface at the top and bottom of the
+    protein. These boundaries are needed since the model constructed consists of five regions (two bulk, two hemispherical caps, and the membrane interior),
+    and the user must specify where the caps are located manually since no algorithm currently can do so.
+    '''
+
     universe,water=setup(topology,trajectory,
     water_label,protein_label)
     u=universe
@@ -41,7 +47,7 @@ def track_counts(topology,trajectory,water_label,protein_label,in_top,in_bottom,
             inst_counts_up=0
             time_elapsed+=1
             water_z=water.coordinates()[:,2]
-            progress=np.divide(universe.trajectory.frame,universe.trajectory.numframes,dtype=np.float64)
+            progress=np.divide(universe.trajectory.frame,universe.trajectory.n_frames,dtype=np.float64)
             tracking_list_last[:]=tracking_list
             if time_elapsed>=write_out_time:
                 time_elapsed=0

@@ -1891,12 +1891,13 @@ class HoppingGraph(object):
             # TODO: coarser dt for long runs, eg dt = 10 ... 100!!
             #       This can blow up in memory in survivalfunction() because of too many t (len(x) big!)
             #       or use an interpolated survival function
-            dt = 1.0                                 # 1.0 == dt in sim  # TODO: adapt dt
+    #        dt = 1.0                                 # 1.0 == dt in sim  # TODO: adapt dt
+            dt = self.traj.dt 
             tmax = numpy.max(taus) + 1.0*dt
             N = len(taus)                            # perhaps sample N times from S ???
             x = numpy.arange(0,tmax+1,dt)            # ... just do lin mesh
             S = survivalfunction(taus,block_w=block_w)
-            enough_data = (len(taus) > 10)
+            enough_data = (N > 10)
             is_single_exp = False                    # try double exp first
             if enough_data:                          # only attempt exp2 with >10 data points
                 fit = fitExp2(x,S(x))                # a*exp(-k1*x) + (1-a)*exp(-k2*x)
