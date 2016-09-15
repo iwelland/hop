@@ -22,6 +22,43 @@ def rate_sum_update(hopgraph,oneway=True):
     g.graph[1]['rate_sum']=rate_sum_bulk
     return g
 
+def graph_update(hopgraph):
+    '''
+    Updates the hop graph with conditional probabilities (i.e. the probability that a given transition is attempted)
+    and the necessary 
+    '''
+
+    h=hopgraph
+    if oneway==True:
+        h.filter(exclude={"bulk":True,"outliers":True,"unconnected":True,'oneway':True})
+    else:
+        h.filter(exclude={"bulk":True,"outliers":True,"unconnected":True})
+    g=copy.deepcopy(h)
+    for node in h.filtered_graph:
+        total_number = 0 # total number of transitions from the node
+        rate_sum=0
+        for neighbor in g.filtered_graph[node]:
+            total_number+=g.filtered_graph[node][neighbor]['N']
+            rate_sum+=g.filtered_graph[node][neighbor]['k']
+        g.filtered_graph[node]['N_total']=total_number
+        g.filtered_graph[node]['rate_sum']=rate_sum
+    total_number_bulk=0
+    rate_sum_bulk=0
+    for neighbor in h.graph[1]:
+        total_number+=h.graph[1][neighbor]['N']
+        rate_sum_bulk+=h.graph[1][neighbor]['k']
+    g.graph[1]['N_total']=total_number
+    g.graph[1]['rate_sum']=rate_sum_bulk
+    
+    for node in h.filtered_graph:
+        for neighbor in g.filtered_graph[node]:
+            N = g.filtered_graph[node][neighbor]
+            g.filtered_graph[node][neighbor]['transition_proportion']=
+
+    return g
+
+
+
 def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num=400,filename='walker_rates',edge_count=False,track_entropy_production=False,oneway=True,up_flux=True,writeout_time=100,writeout=False):
     h=hopgraph
     if oneway==True:
