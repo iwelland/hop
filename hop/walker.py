@@ -50,12 +50,12 @@ def graph_update(hopgraph):
     g.graph[1]['N_total']=total_number
     g.graph[1]['rate_sum']=rate_sum_bulk
     
-    for node in h.filtered_graph:
-        for neighbor in g.filtered_graph[node]:
-            N = g.filtered_graph[node][neighbor]
-            g.filtered_graph[node][neighbor]['transition_proportion']=
+#    for node in h.filtered_graph:
+#        for neighbor in g.filtered_graph[node]:
+#            N = g.filtered_graph[node][neighbor]
+#            g.filtered_graph[node][neighbor]['transition_proportion']=
 
-    return g
+ #   return g
 
 
 
@@ -224,15 +224,16 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
         trajectory_part=np.zeros((4,particle_num,writeout_time))
         writeout_cycle=0
         for step in xrange(steps):
-            if step>=1:
-                writeout_cycle+=1
-            if step % writeout_time-1==0 and writeout==True:
-                writeout_cycle=0
-            trajectory_part[:,:,writeout_cycle]=trajectories
-            if step % writeout_time-1==0 and writeout==True:
-                writeout_index+=1
-                np.save(filename + str(writeout_index),trajectory_part)
-                trajectory_part=np.zeros((4,particle_num,writeout_time))
+            if writeout == True:
+                if step>=1:
+                    writeout_cycle+=1
+                if step % writeout_time-1==0 and writeout==True:
+                    writeout_cycle=0
+                trajectory_part[:,:,writeout_cycle]=trajectories
+                if step % writeout_time-1==0 and writeout==True:
+                    writeout_index+=1
+                    np.save(filename + str(writeout_index),trajectory_part)
+                    trajectory_part=np.zeros((4,particle_num,writeout_time))
             steps_elapsed_total+=1
             random.seed()
             occupied=[site for site in trajectories[0] if site!=0]

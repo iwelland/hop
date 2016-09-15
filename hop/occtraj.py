@@ -37,6 +37,29 @@ def plot_timeseries(occupancy_trajectory,stride,separation,sites):
         index +=1
 
 def path_clustering(occupancy_trajectory):
-    pass
+    
+    dims = np.shape(occupancy_trajectory.T)
+    means = np.empty((dims[0]))
+
+    for i in xrange(dims[0]):
+        occvect = occupancy_trajectory.T[i]
+        means[i] = occvect.mean()
+
+    def dist(mean1,mean2):
+        return (mean1 - mean2)
+
+    #dist_vec = np.vectorize(dist)
+    dist_matrix = np.empty((dims[0],dims[0]))
+    for i in xrange(dims[0]):
+        for j in xrange(dims[0]):
+            dist_matrix[i][j] = dist(means[i],means[j])
+
+    return dist_matrix
+
+
+
+
+
+
 
     
