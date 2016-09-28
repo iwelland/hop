@@ -72,6 +72,12 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
         return trajectories
 
     def remove_particles(trajectories,h,sites,rate_sum):
+        '''
+        This function removes particles in the network by randomly rearranging the list of sites. Then it loops through this random rearrangement,
+        checking if the site is in the bulk interface list. A probability for removing the site is computed by summing over all bulk probabilities 
+        and selecting a site to remove with probability proportional to its bulk rate. 
+        '''
+        
         random.seed()
         r1=random.random()
         probability=0
@@ -99,7 +105,12 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
             return trajectories
         else:
             return False
+
     def bulk_time_calculator(sites):
+        '''
+        This function computes a clock time which determines when particles should be added or removed from the bulk sites.
+        It sums over all bulk edges of sites and takes the inverse of the sum of all rates.
+        '''
 
         h=hopgraph
         bulk_rate=0
@@ -111,6 +122,11 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
         return bulk_time
 
     def poisson_step(site,site_index,walker_time,waiting_time,delta,entropy_production):
+        '''
+        This function checks if the waiting time has been exceeded, and if so randomly repositions a particle on a neighboring site
+        with probability proportional to the edge to that site. 
+        '''
+
         random.seed()
         w=waiting_time
         r2=random.random()
@@ -141,6 +157,10 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
         return (trajectories)
 
     def main(particle_num=particle_num,trajectories=trajectories,up_flux=True,filename=filename):
+        '''
+        This function combines all of the subfunctions of flux in the order necessary to perform the simulation, and also performs initialization.
+        '''
+
         random.seed()
         rate_sum_bottom=0
         rate_sum_top=0
@@ -232,3 +252,26 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
 
     return main(particle_num=particle_num,trajectories=trajectories,filename=filename)
 
+def random_graph_generator(hopgraph,topology,rate_distribution,z_distribution,**args):
+    
+    '''
+    This function will take a hopgraph as input and return a graph with a new topology, rate distribution, and z distribution, reusing parameters as specified as the user.
+    The point is to compare this new graph's flux with an actual hopgraph's flux and see how sensitive the walker's calculations are to the previously mentioned parameters.
+
+    hopgraph -- Original hopgraph, from which various base properties are derived, such as the number of nodes or z positions. Filter prior to inclusion.. 
+
+    topology -- list of edges generated from a networkx graph generator or specified otherwise by the user.
+
+    rate_distribution -- Distribution function for the rates. This function will be called to generate a new rate as each edge is generated. The function can be general, such as a mathematical
+                         function or a function that returns a list of predetermined rates.
+
+    z_distribution -- Essentially the same as the rate distribution, except this will determine the z values of the nodes based upon a function passed by the user.
+    '''
+    h = copy.deepcopy(hopgraph)
+    h.filtered_graph.remove_edges_from(h.filtered_graph.edges())
+
+    for edge in topology:
+        h.filtered_graph.add_edge(edge)
+        h.filtered_graph[edge[0]][edge[1]] = rate_distribution(**args)
+
+    return h
