@@ -207,15 +207,16 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
         trajectory_part=np.zeros((4,particle_num,writeout_time))
         writeout_cycle=0
         for step in xrange(steps):
-            if step>=1:
-                writeout_cycle+=1
-            if step % writeout_time-1==0 and writeout==True:
-                writeout_cycle=0
-            trajectory_part[:,:,writeout_cycle]=trajectories
-            if step % writeout_time-1==0 and writeout==True:
-                writeout_index+=1
-                np.save(filename + str(writeout_index),trajectory_part)
-                trajectory_part=np.zeros((4,particle_num,writeout_time))
+            if writeout==True:
+                if step>=1:
+                    writeout_cycle+=1
+                if step % writeout_time-1==0 and writeout==True:
+                    writeout_cycle=0
+                trajectory_part[:,:,writeout_cycle]=trajectories
+                if step % writeout_time-1==0 and writeout==True:
+                    writeout_index+=1
+                    np.save(filename + str(writeout_index),trajectory_part)
+                    trajectory_part=np.zeros((4,particle_num,writeout_time))
             steps_elapsed_total+=1
             random.seed()
             occupied=[site for site in trajectories[0] if site!=0]
@@ -242,13 +243,13 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
                 waiting_time=trajectories[2][trajectory]
                 if site!=0.0:
                     trajectories=poisson_step(site,trajectory,current_time,waiting_time,delta,entropy_production)
-                    entropy_production+=trajectories[3][site]
+                    #entropy_production+=trajectories[3][site]
             rate=np.divide(counts,delta*step,dtype=np.float64)
-            rates.write(str(rate))
+            rates.write(str(rate) + '\n')
             if steps_elapsed_total*delta>=1:
                 steps_elapsed_total=0
         rate=np.divide(counts,delta*steps,dtype=np.float64)
-        net_entropy_production=np.divide(entropy_production,steps*delta)
+        #net_entropy_production=np.divide(entropy_production,steps*delta)
 
     return main(particle_num=particle_num,trajectories=trajectories,filename=filename)
 
