@@ -38,7 +38,7 @@ def flux_calculator(hopgraph,topology,cutoff=1,delta=0.1,steps=1000,particle_num
     def generate_waiting_time(site):
         rate_sum=h.filtered_graph[site]['rate_sum'] # normalization factor
         r1=random.random()
-        waiting_time=-np.log(r1)/rate_sum # assume expontential jump attempt waiting time
+        waiting_time=(np.log(rate_sum)-np.log(r1))/rate_sum # assume expontential jump attempt waiting time
         return waiting_time
 
     def add_particles(trajectories,hopgraph,sites,rate_sum):
