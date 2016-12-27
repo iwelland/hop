@@ -11,12 +11,14 @@ def occupancy_trajectory(hopgraph,trajectory):
 
     n_nodes = len(hopgraph.graph.nodes())
     totaltime = trajectory.totaltime
-    occ_traj = np.empty((totaltime,n_nodes))
+    occ_traj = np.zeros((totaltime,n_nodes))
     
     for ts in trajectory:
         positions = ts.positions.T[0]
         positions_nonzero = positions[positions != 0].astype(int)
         occ_traj[ts.frame][positions_nonzero-1]=1
+        #positions_zero = positions[positions == 0].astype(int)
+        occ_traj[ts.frame][occ_traj[ts.frame]==0] = -1
         
     return occ_traj
 

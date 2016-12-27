@@ -29,10 +29,11 @@ def graph_update(hopgraph):
     '''
 
     h=hopgraph
-    if oneway==True:
-        h.filter(exclude={"bulk":True,"outliers":True,"unconnected":True,'oneway':True})
-    else:
-        h.filter(exclude={"bulk":True,"outliers":True,"unconnected":True})
+
+    #if oneway==True:
+    #    h.filter(exclude={"bulk":True,"outliers":True,"unconnected":True,'oneway':True})
+    #else:
+    #    h.filter(exclude={"bulk":True,"outliers":True,"unconnected":True})
     g=copy.deepcopy(h)
     for node in h.filtered_graph:
         total_number = 0 # total number of transitions from the node
